@@ -9,6 +9,20 @@ export type Action =
     | { type: 'CLOSE_DRAWER'}
     | { type: 'SET_USER', name: string}
     | { type: 'SET_LIST', list: string}
+    
+    | { type: 'LOGIN_ATTEMPT', userinfo: Object}
+    | { type: 'LOGIN_SUCCESS'}
+    | { type: 'LOGIN_FAILED'}
+
+    | { type: 'LOGOUT'}
+
+    | { type: 'GET_LAUNCHES_REQUEST'}
+    | { type: 'GET_LAUNCHES_SUCCESS'}
+    | { type: 'GET_LAUNCHES_FAILED'}
+
+    | { type: 'REGISTER_ATTEMPT', userinfo: Object}
+    | { type: 'REGISTER_SUCCESS'}
+    | { type: 'REGISTER_FAILED'};
 
 export type Dispatch = (action:Action | Array<Action>) => any;
 export type GetState = () => Object;

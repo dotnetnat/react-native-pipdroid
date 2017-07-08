@@ -1,69 +1,120 @@
 
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Input, Button, Icon, View, Text } from 'native-base';
+import { Container, Content, Item, Input, Label, Button, Title, Icon, View, Text, Header, Left, Right, Body, Toast, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-import { setUser } from '../../actions/user';
+import theme from '../../themes/base-theme';
 import styles from './styles';
 
+import { setUser } from '../../actions/user';
+import { tryLogin } from '../../actions/login';
 
 const background = require('../../../images/shadow.png');
 
 class Login extends Component {
 
   static propTypes = {
+    name: React.PropTypes.string,
     setUser: React.PropTypes.func,
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
+      password: ''
     };
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
-  setUser(name) {
+  componentWillReceiveProps = (nextProps) => {
+    const {msg, isLoggedIn} = nextProps;
+
+    if (!isLoggedIn && msg) {
+      Toast.show({
+        text: msg,
+        position: 'bottom',
+        duration: 3000,
+        type: 'danger'
+      });
+    }  
+  }
+  
+  componentDidMount = () => {
+    console.log("-------------did mount-------------");
+  }
+
+  setUser = (name) => {
     this.props.setUser(name);
   }
 
+  handleLogin = () => {
+    const userinfo = {username: this.state.username, password: this.state.password};
+    if (!userinfo.username && !userinfo.password) {
+      Toast.show({
+        text: "Please input correct username and password",
+        position: 'bottom',
+        duration: 3000,
+        type: 'warning'
+      });
+      return;
+    }
 
-  render() {
+    this.props.tryLogin(userinfo);
+  }
+
+  render() {  
+    const {isAttempting, msg, isLoggedIn} = this.props;
+    AsyncStorage.getItem('token', (err, token) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (token) {
+        console.log(token);
+        Actions.pop();
+        Actions.home();
+      }
+    });
     return (
       <Container>
         <View style={styles.container}>
           <Content>
-            <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
-                <Item style={styles.input}>
-                  <Icon active name="person" />
-                  <Input placeholder="EMAIL" onChangeText={name => this.setState({ name })} />
+                <Image source={require('../../../images/logo.png')} style={styles.logo}/>
+                <Item floatingLabel style={styles.input}>
+                  <Icon active name="person" fontSize={10}/>
+                  <Label>USERNAME</Label>
+                  <Input onChangeText={username => this.setState({ username })} />
                 </Item>
-                <Item style={styles.input}>
-                  <Icon name="unlock" />
-                  <Input
-                    placeholder="PASSWORD"
-                    secureTextEntry
-                  />
+                <Item floatingLabel style={styles.input}>
+                  <Icon name="unlock" fontSize={10}/>
+                  <Label>PASSWORD</Label>
+                  <Input secureTextEntr onChangeText={password => this.setState({ password })}/>
                 </Item>
-                <Button style={styles.btn} onPress={() => Actions.home()}>
+                <Button rounded block style={{ backgroundColor: theme.btnPrimaryBg}} onPress={()=>{this.handleLogin();}}>
                   <Text>Login</Text>
                 </Button>
+                {<Text style={styles.register}>
+                  Don't you have an account? <Text style={styles.registerLink} onPress={()=>{Actions.register();}}>Register here</Text>
+                </Text>}
+                {isAttempting && <Spinner color='green'/>}
               </View>
-            </Image>
           </Content>
+
         </View>
       </Container>
     );
   }
 }
 
-function bindActions(dispatch) {
-  return {
-    setUser: name => dispatch(setUser(name)),
-  };
-}
+const bindActions = (dispatch) => ({
+  setUser: name => dispatch(setUser(name)),
+  tryLogin : userinfo => dispatch(tryLogin(userinfo)),
+});
 
+const mapsStateToProps = (state) => (state.login);
 
-export default connect(null, bindActions)(Login);
+export default connect(mapsStateToProps, bindActions)(Login);

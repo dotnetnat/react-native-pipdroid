@@ -1,13 +1,16 @@
 
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right, Toast } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
+import Launch from './launch';
 
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import { tryGetLaunches } from '../../actions/home';
+
 import styles from './styles';
 
 
@@ -16,38 +19,38 @@ class Home extends Component {
   static propTypes = {
     name: React.PropTypes.string,
     setIndex: React.PropTypes.func,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
   }
 
-  newPage(index) {
+  newPage = (index) => {
     this.props.setIndex(index);
     Actions.blankPage();
   }
 
+  componentDidMount = () => {
+    this.props.tryGetLaunches();
+  }
+
   render() {
+    const {launches} = this.props.launches;
+    console.log (launches);
     return (
       <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
-              <Icon active name="power" />
-            </Button>
-          </Left>
-
-          <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
+        <Header style={styles.header}>
+          
+          <Body >
+            <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>  
           </Body>
 
           <Right>
             <Button transparent onPress={this.props.openDrawer}>
-              <Icon active name="menu" />
+              <Icon active name="ios-menu" />
             </Button>
           </Right>
         </Header>
-
-        <Content>
-          <Grid style={styles.mt}>
+        <ScrollView style={{backgroundColor:"#f0ffe8", padding: 10}}>
+        <Content >
+          {/*<Grid style={styles.mt}>
             {this.props.list.map((item, i) =>
               <Row key={i}>
                 <TouchableOpacity
@@ -58,23 +61,30 @@ class Home extends Component {
                 </TouchableOpacity>
               </Row>
             )}
-          </Grid>
+          </Grid>*/}
+          
+          {launches.map((launch, index) => (
+            <Launch key={launch.launch_id} launch={launch} onChangeStatus={()=> this.props.tryGetLaunches}></Launch>
+          ))}
         </Content>
+        </ScrollView>
       </Container>
     );
   }
 }
 
-function bindAction(dispatch) {
-  return {
-    setIndex: index => dispatch(setIndex(index)),
-    openDrawer: () => dispatch(openDrawer()),
-  };
-}
-
-const mapStateToProps = state => ({
-  name: state.user.name,
-  list: state.list.list,
+const bindAction = dispatch => ({
+  setIndex: index => dispatch(setIndex(index)),
+  openDrawer: () => dispatch(openDrawer()),
+  tryGetLaunches: () => dispatch(tryGetLaunches()),
 });
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    name: state.user.name,
+    launches: state.home,
+  }
+};
 
 export default connect(mapStateToProps, bindAction)(Home);

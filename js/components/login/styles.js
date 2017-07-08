@@ -14,6 +14,17 @@ export default {
     right: 0,
     backgroundColor: '#FBFAFA',
   },
+  header: {
+    alignItems: 'center'
+  },
+  logo: {
+    width: 170,
+    height: 170,
+    marginTop: 50,
+    marginBottom: 50,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
   shadow: {
     flex: 1,
     width: null,
@@ -21,18 +32,28 @@ export default {
   },
   bg: {
     flex: 1,
-    marginTop: deviceHeight / 1.75,
     paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
     paddingBottom: 30,
     bottom: 0,
   },
   input: {
     marginBottom: 20,
+    shadowColor: '#23aae1',
   },
   btn: {
     marginTop: 20,
-    alignSelf: 'center',
+    backgroundColor: '#23aae1',
   },
+  register: {
+    marginTop: 20,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  registerLink: {
+    marginTop: 20,
+    fontSize: 12,
+    color: 'green',
+  }
 };

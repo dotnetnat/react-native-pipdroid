@@ -11,4 +11,12 @@ export default {
     paddingTop: 30,
     backgroundColor: '#fff',
   },
+  logo: {
+    width: 180,
+    height: 180,
+    marginTop: 10,
+    marginBottom: 20,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  }
 };

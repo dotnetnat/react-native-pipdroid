@@ -2,6 +2,7 @@
 import { actions } from 'react-native-navigation-redux-helpers';
 import { closeDrawer } from './drawer';
 
+
 const {
   replaceAt,
   popRoute,
