@@ -25,9 +25,11 @@ export default {
   launch: {
     card: {
       borderRadius: 4,
+      padding: 5,
     },
     cardItem: {
-      padding: 5,
+      padding: 0,
+      paddingRight: 0,
       borderRadius: 4
     },
     cardItemFooter: {
@@ -35,6 +37,16 @@ export default {
     },
     cardItemText: {
 
+    },
+    button: {
+      height: 20,
+      paddingTop: 0,
+      paddingBottom: 4,
+      paddingLeft: 4,
+      paddingRight: 4
+    },
+    buttonText: {
+      fontSize: 12
     }
   }
 };

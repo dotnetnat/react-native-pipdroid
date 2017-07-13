@@ -2,11 +2,11 @@ import apisauce from 'apisauce';
 import {AsyncStorage} from 'react-native';
 const baseURL = 'http://192.168.0.168:8080/api';
 
-function json(data) {
+const json = (data) => {
   return JSON.stringify(data);
 }
 
-function formData(data) {
+const formData = (data) => {
   const str = [];
   for (const p in data) {
     const key = encodeURIComponent(p);
@@ -60,4 +60,4 @@ const logout = () => {
   return api.post('/logout');
 }
 
-export default {api, login, register, logout, getLaunches};
+export default {api, json, login, register, logout, getLaunches};

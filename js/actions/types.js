@@ -16,6 +16,10 @@ export type Action =
 
     | { type: 'LOGOUT'}
 
+    | { type: 'CHANGE_STATUS_REQUEST'}
+    | { type: 'CHANGE_STATUS_SUCCESS'}
+    | { type: 'CHANGE_STATUS_FAILED'}
+
     | { type: 'GET_LAUNCHES_REQUEST'}
     | { type: 'GET_LAUNCHES_SUCCESS'}
     | { type: 'GET_LAUNCHES_FAILED'}

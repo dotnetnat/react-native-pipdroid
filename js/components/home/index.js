@@ -50,19 +50,9 @@ class Home extends Component {
         </Header>
         <ScrollView style={{backgroundColor:"#f0ffe8", padding: 10}}>
         <Content >
-          {/*<Grid style={styles.mt}>
-            {this.props.list.map((item, i) =>
-              <Row key={i}>
-                <TouchableOpacity
-                  style={styles.row}
-                  onPress={() => this.newPage(i)}
-                >
-                  <Text style={styles.text}>{item}</Text>
-                </TouchableOpacity>
-              </Row>
-            )}
-          </Grid>*/}
-          
+          <Button rounded style={{marginTop: 10, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto'}}>
+            <Text>+ Launch More EAs</Text>
+          </Button>
           {launches.map((launch, index) => (
             <Launch key={launch.launch_id} launch={launch} onChangeStatus={()=> this.props.tryGetLaunches}></Launch>
           ))}
