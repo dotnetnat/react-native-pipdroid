@@ -35,7 +35,7 @@ class SideBar extends Component {
         <ListItem button onPress={() => { Actions.home(); this.props.closeDrawer();}} >
           <Text>Home</Text>
         </ListItem>
-        <ListItem button onPress={() => { Actions.blankPage(); this.props.closeDrawer(); }} >
+        <ListItem button onPress={() => { Actions.launchEA(); this.props.closeDrawer(); }} >
           <Text>Launch EA</Text>
         </ListItem>
         <ListItem button onPress={() => { Actions.blankPage(); this.props.closeDrawer(); }} >

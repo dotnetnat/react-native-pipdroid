@@ -26,6 +26,8 @@ export default {
     card: {
       borderRadius: 4,
       padding: 5,
+      paddingLeft: 10,
+      paddingRight: 10
     },
     cardItem: {
       padding: 0,

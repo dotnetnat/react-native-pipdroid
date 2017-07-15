@@ -7,9 +7,10 @@ import { Router, Scene } from 'react-native-router-flux';
 
 import { closeDrawer } from './actions/drawer';
 
-import Login from './components/login/';
-import Register from './components/register/';
+import Login from './components/login';
+import Register from './components/register';
 import Home from './components/home/';
+import LaunchEA from './components/launchEA';
 import BlankPage from './components/blankPage';
 import SideBar from './components/sideBar';
 import { statusBarColor } from './themes/base-theme';
@@ -53,6 +54,8 @@ class AppNavigator extends Component {
         return <Login />;
       case 'home':
         return <Home />;
+      case 'launchEA':
+        return <LaunchEA/>;
       case 'blankPage':
         return <BlankPage />;
       default :
@@ -94,11 +97,13 @@ class AppNavigator extends Component {
           barStyle="default"/>
         <RouterWithRedux>
           <Scene key="root">
-            <Scene key="login" component={Login} hideNavBar initial type="reset" direction="vertical"/>
-            <Scene key="register" component={Register} hideNavBar/>
-            <Scene key="home" component={Home} hideNavBar type="reset">
+            <Scene key="login" component={ Login } hideNavBar initial type="reset" title="Login"/>
+            <Scene key="register" component={ Register } hideNavBar title="Register"/>
+            <Scene key="home" component={ Home } hideNavBar type="reset" title="Home">
+              {/*<Scene key="launchEA" component={ LaunchEA } hideNavBar title="Launch EA"/>*/}
             </Scene>
-            <Scene key="blankPage" component={BlankPage} />
+            <Scene key="launchEA" component={ LaunchEA } scheme="modal" title="Launch EA" hideNavBar/>
+            <Scene key="blankPage" component={ BlankPage } hideNavBar title="Profile"/>
           </Scene>
         </RouterWithRedux>
       </Drawer>

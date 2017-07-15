@@ -9,12 +9,17 @@ import Launch from './launch';
 
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
-import { tryGetLaunches } from '../../actions/home';
+import { tryGetLaunches, changeStatus } from '../../actions/home';
 
 import styles from './styles';
 
 
 class Home extends Component {
+
+  constructor (props) {
+    super(props);
+    this.onChangeStatus = this.onChangeStatus.bind(this);
+  }
 
   static propTypes = {
     name: React.PropTypes.string,
@@ -27,17 +32,22 @@ class Home extends Component {
     Actions.blankPage();
   }
 
+  onChangeStatus = (launch_id, activeStatus) => {
+    this.props.changeStatus({
+      launch_id: launch_id,
+      active: (activeStatus == 0 ? 1 : 0)
+    })
+  }
+
   componentDidMount = () => {
     this.props.tryGetLaunches();
   }
 
   render() {
     const {launches} = this.props.launches;
-    console.log (launches);
     return (
       <Container style={styles.container}>
         <Header style={styles.header}>
-          
           <Body >
             <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>  
           </Body>
@@ -48,16 +58,22 @@ class Home extends Component {
             </Button>
           </Right>
         </Header>
+
         <ScrollView style={{backgroundColor:"#f0ffe8", padding: 10}}>
-        <Content >
-          <Button rounded style={{marginTop: 10, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto'}}>
-            <Text>+ Launch More EAs</Text>
-          </Button>
-          {launches.map((launch, index) => (
-            <Launch key={launch.launch_id} launch={launch} onChangeStatus={()=> this.props.tryGetLaunches}></Launch>
-          ))}
-        </Content>
+          <Content >
+            <Button 
+              rounded 
+              style={{marginTop: 10, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto'}}
+              onPress = {()=>Actions.launchEA()}
+            >
+              <Text>+ Launch More EAs</Text>
+            </Button>
+            {launches.map((launch, index) => (
+              <Launch key={launch.launch_id} launch={launch} onChangeStatus={()=> this.onChangeStatus(launch.launch_id, launch.active)}></Launch>
+            ))}
+          </Content>
         </ScrollView>
+        
       </Container>
     );
   }
@@ -67,10 +83,10 @@ const bindAction = dispatch => ({
   setIndex: index => dispatch(setIndex(index)),
   openDrawer: () => dispatch(openDrawer()),
   tryGetLaunches: () => dispatch(tryGetLaunches()),
+  changeStatus: (payload) => dispatch(changeStatus(payload)),
 });
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     name: state.user.name,
     launches: state.home,

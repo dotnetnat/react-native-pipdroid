@@ -27,7 +27,6 @@ const api = apisauce.create({
 
 api.addAsyncRequestTransform(request => async () => {
   const token = await AsyncStorage.getItem('token');
-  console.log(token);
   if (token)
     request.headers['Authentication'] = token;
   else
@@ -52,12 +51,24 @@ const register = (userInfo) => {
   }));
 };
 
-const getLaunches = () => {
-  return api.post('/getlaunches');
-}
+const getLaunches   = () => api.post('/getlaunches');
 
-const logout = () => {
-  return api.post('/logout');
-}
+const changeStatus  = (payload) => api.post('/changestatus', json(payload))
 
-export default {api, json, login, register, logout, getLaunches};
+const getConfInfo   = () => api.post('/getconfinfo');
+
+const logout        = () => api.post('/logout');
+
+const launchEA      = (payload) => api.post('/launchea', json(payload)); 
+
+export default {
+  api,
+  json,
+  login, 
+  register, 
+  logout, 
+  changeStatus, 
+  getLaunches, 
+  getConfInfo,
+  launchEA
+};

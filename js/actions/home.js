@@ -63,11 +63,12 @@ export const tryGetLaunches = () => {
 export const changeStatus = (payload) => {
   return function (dispatch, getState) {
     dispatch({type: CHANGE_STATUS_REQUEST});
-    api.post('/changestatus', json(payload)).then((res) => {
+    console.log(payload);
+    apis.changeStatus(payload).then((res) => {
       if (res.ok) {
-        dispatch(getLaunchesSuccess(res.data));
+        dispatch({type: CHANGE_STATUS_SUCCESS, payload: res.data});
       } else {
-        dispatch(getLaunchesFailed(res.data));
+        dispatch({type: CHANGE_STATUS_FAILED, payload: res.data});
       }
     });
   }
