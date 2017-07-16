@@ -20,6 +20,7 @@ export default function (state = initialState, action) {
 				eas: action.payload.eas,
 			});
     case 'LAUNCH_EA_SUCCESS':
+      // Actions.home();
       return Object.assign({}, state);
     default:
       return state;

@@ -50,7 +50,6 @@ export const tryGetLaunches = () => {
   return function (dispatch, getState) {
     dispatch(getLaunchesRequest());
     apis.getLaunches().then((res) => {
-      console.log(res);
       if (res.ok) {
         dispatch(getLaunchesSuccess(res.data));
       } else {

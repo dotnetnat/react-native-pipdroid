@@ -33,7 +33,6 @@ export function tryLogin(payload) {
     dispatch(loginAttemp(payload));
     api.login(payload).then((res) => {
       if (res.ok) {
-        console.log(res);
         dispatch(loginSuccess(res.data));
       } else {
         dispatch(loginFailed(res.data));

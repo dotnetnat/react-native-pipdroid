@@ -27,16 +27,17 @@ export const getConfInfo = () => {
 	}
 }
 
-export const luanchEA = (payload) => {
+export const launchEA = (payload) => {
+	console.log(payload);
 	return function (dispatch, getState) {
 		dispatch({ type: LAUNCH_EA_REQUEST });
-
 		apis.launchEA(payload).then((res) => {
+			console.log(res);
 			if (res.ok)
-				dispatch({type: LAUNCH_EA_SUCCESS, payload: res.data});
+				// dispatch({type: LAUNCH_EA_SUCCESS, payload: res.data});
+				Actions.home();
 			else
 				dispatch({type: LAUNCH_EA_FAILED, payload: res.data});
 		});
 	}
 }
-

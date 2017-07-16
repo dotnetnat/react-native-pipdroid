@@ -11,7 +11,6 @@ import { getConfInfo, launchEA } from '../../actions/launchEA';
 
 import styles from './styles';
 
-
 class LaunchEA extends Component {
 
   constructor (props) {
@@ -32,25 +31,6 @@ class LaunchEA extends Component {
 		this.onEAChange = this.onEAChange.bind(this);	
 		this.onLaunchEA = this.onLaunchEA.bind(this);	
   }
-
-  componentDidMount = () => {
-		this.props.dispatch(getConfInfo());
-  }
-
-	componentWillReceiveProps = (nextProps) => {
-		const { servers, symbols, timeframes, eas } = nextProps;
-		if (servers.length > 0 && symbols.length > 0 && timeframes.length > 0 && eas.length > 0) {
-			
-			this.setState({
-				server : 0,
-				symbol: symbols[0].symbol,
-				timeframe: timeframes[0].timeframe_name,
-				EA: eas[0].ea_name,
-				username: servers[0].account.useranme,
-				password: servers[0].account.useranme
-			});
-		}
-	}
 
 	onServerChange = (value) => {
 		console.log(index);
@@ -80,21 +60,46 @@ class LaunchEA extends Component {
 	}
 
 	onLaunchEA = () => {
-		console.log(this.state);
-		// const postData = {
-		// 	server_name: this.props.servers[this.state.server].server_name,
-		// 	login: this.state.useranme,
-		// 	password: this.state.password,
-		// 	symbol: this.state.symbol,
-		// 	timeframe: this.state.timeframe,
-		// 	ea: this.state.EA,
-		// 	active: 1
-		// };
+		if (this.state.username.trim() == "" || this.state.password.trim() == "") {
+			Toast.show({
+        text: "Please input correct ID and password",
+        position: 'bottom',
+        duration: 3000,
+        type: 'warning'
+      });
+			return;
+		}
+		const postData = {
+			server_name: this.props.servers[this.state.server].server_name,
+			login: this.state.username,
+			password: this.state.password,
+			symbol: this.state.symbol,
+			timeframe: this.state.timeframe,
+			ea_name: this.state.EA,
+			active: 1
+		};
 
-		// this.props.dispatch(launchEA(this.state));
+		this.props.dispatch(launchEA(postData));
 	}
 
+  componentDidMount = () => {
+		this.props.dispatch(getConfInfo());
+  }
 
+	componentWillReceiveProps = (nextProps) => {
+		const { servers, symbols, timeframes, eas } = nextProps;
+		if (servers.length > 0 && symbols.length > 0 && timeframes.length > 0 && eas.length > 0) {
+			console.log(servers[0].account);
+			this.setState({
+				server : 0,
+				symbol: symbols[0].symbol,
+				timeframe: timeframes[0].timeframe_name,
+				EA: eas[0].ea_name,
+				username: servers[0].account.username || "",
+				password: servers[0].account.password || ""
+			});
+		}
+	}
 
   render() {
 		const { servers, symbols, timeframes, eas } = this.props;
@@ -141,7 +146,11 @@ class LaunchEA extends Component {
 							<Grid>
 								<Col style={{padding: 10}}>
 									<Item fixedLabel>
-										<Input style={styles.server.input} placeholder='Account ID' value={this.state.username} onChange={(event) => {console.log(event.target.value);this.setState({username: event.target.value})}}/>
+										<Input style={styles.server.input} 
+											placeholder='Account ID' 
+											value={this.state.username} 
+											onChangeText={username => this.setState({username})}
+										/>
 									</Item>
 								</Col>
 
@@ -150,7 +159,7 @@ class LaunchEA extends Component {
 										<Input style={styles.server.input} 
 											placeholder='Account Password' 
 											value={this.state.password} 
-											onChange={(event) => {this.setState({password: event.target.value})}}
+											onChangeText={password => this.setState({password})}
 										/>
 									</Item>
 								</Col>	
